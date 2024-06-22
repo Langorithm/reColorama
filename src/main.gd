@@ -31,17 +31,17 @@ func _ready() -> void:
 	file_menu.id_pressed.connect(
 		func(id):
 			if id == 0:
+				file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 				file_dialog.visible = true
 				#file_dialog.ok_button_text = "Open"
-				file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 				file_dialog.file_selected.connect(
 					open_image_file
 					,CONNECT_ONE_SHOT
 				)
 			elif id == 1:
+				file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 				file_dialog.visible = true
 				#file_dialog.ok_button_text = "Save"
-				file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 				file_dialog.file_selected.connect(
 					save_image
 					,CONNECT_ONE_SHOT
@@ -113,7 +113,8 @@ func _get_image_palette(im: Image) -> Array:
 	for i in range(x):
 		for j in range(y):
 			var pixel: Color = Color(im.get_pixel(i,j),1)
-			if pixel.a:
+			pixel.linear_to_srgb()
+			if pixel.a == 1:
 				color_set[pixel] = ""
 	
 	var res = color_set.keys()
