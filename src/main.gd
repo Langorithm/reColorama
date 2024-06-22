@@ -8,8 +8,14 @@ extends Control
 var colors: Array[Color]
 
 
-
 func _ready() -> void:
+	var args = OS.get_cmdline_args()
+	if len(args) > 1:
+		if _is_image(args[1]):
+			open_image_file(args[1])
+		else:
+			push_warning("%s type not supported." % [args[1]])
+
 	get_viewport().files_dropped.connect(_on_files_dropped)
 	v_flow_container.get_child(0).queue_free()
 	source_sprite.texture = null
@@ -88,3 +94,10 @@ func _get_image_palette(im: Image) -> Array:
 func _on_files_dropped(files) -> void:
 	var path = files[0]
 	open_image_file(path)
+
+
+func _is_image(path:String) -> bool:
+	var formats = ".png,.svg,.jpg,.jpeg".split(",")
+	for format in formats:
+		return path.ends_with(format)
+	return false
