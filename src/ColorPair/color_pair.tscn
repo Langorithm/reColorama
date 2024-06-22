@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw7aasjiododn"]
+
+[ext_resource type="Script" path="res://ColorPair/color_pair.gd" id="1_qxl4b"]
+
+[node name="ColorPair" type="HBoxContainer"]
+offset_right = 84.0
+offset_bottom = 8.0
+script = ExtResource("1_qxl4b")
+
+[node name="SourceRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(80, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="TargetPicker" type="ColorPickerButton" parent="."]
+custom_minimum_size = Vector2(80, 2.08165e-12)
+layout_mode = 2
+edit_alpha = false
