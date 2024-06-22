@@ -4,27 +4,58 @@ extends Control
 @onready var vp: SubViewport = %SubViewport
 @onready var source_sprite: TextureRect = %SourceTexture
 @onready var v_flow_container: VFlowContainer = %VFlowContainer
+@onready var file_menu: PopupMenu = %File
+@onready var file_dialog: FileDialog = %FileDialog
 
 var colors: Array[Color]
 
 
 func _ready() -> void:
+	var ctrl_cmd = KEY_MASK_META if OS.get_name() == "macOS" else KEY_MASK_CTRL
 	var args = OS.get_cmdline_args()
 	if len(args) > 1:
 		if _is_image(args[1]):
-			open_image_file(args[1])
+			open_image_file(args[1]) ## FIXME
 		else:
 			push_warning("%s type not supported." % [args[1]])
 
 	get_viewport().files_dropped.connect(_on_files_dropped)
 	v_flow_container.get_child(0).queue_free()
-	source_sprite.texture = null
+	
+	file_menu.add_item(
+		"Open... ",0,KEY_O + ctrl_cmd
+	)
+	file_menu.add_item(
+		"Save... ",1,KEY_S + ctrl_cmd
+	)
+	file_menu.id_pressed.connect(
+		func(id):
+			if id == 0:
+				file_dialog.visible = true
+				#file_dialog.ok_button_text = "Open"
+				file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+				file_dialog.file_selected.connect(
+					open_image_file
+					,CONNECT_ONE_SHOT
+				)
+			elif id == 1:
+				file_dialog.visible = true
+				#file_dialog.ok_button_text = "Save"
+				file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+				file_dialog.file_selected.connect(
+					save_image
+					,CONNECT_ONE_SHOT
+				)
+	)
 
 
 func open_image_file(filepath):
 	var img = Image.load_from_file(filepath)
 	setup_for_image(img)
 
+func save_image(path: String):
+	var img = display_sprite.texture.get_image()
+	img.save_png(path)
 
 func setup_for_image(image: Image):
 	# Clean color pairs
@@ -45,6 +76,8 @@ func setup_for_image(image: Image):
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_down"):
+		pass
 	if event.is_action_pressed("ui_accept"):
 		var img = display_sprite.texture.get_image()
 		var path = OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
