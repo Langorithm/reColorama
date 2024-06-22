@@ -119,8 +119,12 @@ func _get_image_palette(im: Image) -> Array:
 	
 	var res = color_set.keys()
 	res.sort_custom(func(c0: Color, c1: Color):
+		var epsillon = 0.005
+		if c0.s < epsillon or c1.s < epsillon:
+			return c0.v > c0.v
 		return c0.h < c1.h
 	)
+
 	
 	return res
 
