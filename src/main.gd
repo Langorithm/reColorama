@@ -8,10 +8,29 @@ extends Control
 var colors: Array[Color]
 
 
+
 func _ready() -> void:
+	get_viewport().files_dropped.connect(_on_files_dropped)
 	v_flow_container.get_child(0).queue_free()
+	source_sprite.texture = null
+
+
+func open_image_file(filepath):
+	var img = Image.load_from_file(filepath)
+	setup_for_image(img)
+
+
+func setup_for_image(image: Image):
+	# Clean color pairs
+	v_flow_container.get_children().map(func(child):
+		child.queue_free()
+	)
+	
+	source_sprite.texture = ImageTexture.create_from_image(image)
+	source_sprite.size = image.get_size()
 	vp.size = source_sprite.get_rect().size
-	var palette: Array = _get_image_palette(source_sprite.texture.get_image())
+	
+	var palette: Array = _get_image_palette(image)
 	var idx = 0
 	for color in palette:
 		var cp = ColorPair.construct(v_flow_container, color)
@@ -64,3 +83,8 @@ func _get_image_palette(im: Image) -> Array:
 	)
 	
 	return res
+
+
+func _on_files_dropped(files) -> void:
+	var path = files[0]
+	open_image_file(path)
