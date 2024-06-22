@@ -51,7 +51,11 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="DisplaySprite" type="TextureRect" parent="MarginContainer"]
+[node name="ReferenceRect" type="ReferenceRect" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DisplayTexture" type="TextureRect" parent="MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 texture = SubResource("ViewportTexture_d02yq")
@@ -66,16 +70,12 @@ size_flags_horizontal = 8
 [node name="ColorPair" parent="MarginContainer/VFlowContainer" instance=ExtResource("4_jki75")]
 layout_mode = 2
 
-[node name="ReferenceRect" type="ReferenceRect" parent="MarginContainer"]
-layout_mode = 2
-mouse_filter = 2
-
 [node name="SubViewport" type="SubViewport" parent="."]
 unique_name_in_owner = true
 transparent_bg = true
 size = Vector2i(8, 8)
 
-[node name="SourceSprite" type="TextureRect" parent="SubViewport"]
+[node name="SourceTexture" type="TextureRect" parent="SubViewport"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_jgx0j")
 offset_right = 8.0

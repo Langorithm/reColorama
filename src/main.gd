@@ -1,8 +1,8 @@
 extends Control
 
-@onready var display_sprite: TextureRect = %DisplaySprite
+@onready var display_sprite: TextureRect = %DisplayTexture
 @onready var vp: SubViewport = %SubViewport
-@onready var source_sprite: TextureRect = %SourceSprite
+@onready var source_sprite: TextureRect = %SourceTexture
 @onready var v_flow_container: VFlowContainer = %VFlowContainer
 
 var colors: Array[Color]
